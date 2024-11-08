@@ -21,12 +21,11 @@ from rest_framework import status
 cache.set('my_key', 'This is the value chote', timeout=10)
 
 class Test(APIView):
-    def post(self,request):
-        token_verification = validation(request,['admin',"receptionist"])
-        if token_verification:
-           return Response({"yeee":"working"},status=200)
-        else:
-            return Response({"error":"Unauthorized"},status=401)
+    def post(self, request):
+        client_ip = request.META.get('REMOTE_ADDR')
+        print(client_ip)
+        return Response({"message": "working", "client_ip": str(client_ip)}, status=200)
+
         
 class Test_01(APIView):
     permission_classes = [AllowAny]

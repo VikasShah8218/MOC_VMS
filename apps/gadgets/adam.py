@@ -29,8 +29,10 @@ class AdamService:
                 return result
             return None
         
-def activate(ip,port,address1):
-    print(ip,"       ",port, "        " ,address1)    
+def activate(ip,address1):
+    port  = 502
+    print(ip,"       ",port, "        " ,address1)  
+    return True  
     try:
         modbus_client = AdamService.connect_modbus(ip, int(port))
         coil_status = AdamService.read_coils(modbus_client, address1)[0]

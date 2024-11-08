@@ -30,7 +30,6 @@ class VisitorListCreateAPIView(generics.ListCreateAPIView, CustomAuthenticationM
         context['created_by'] = self.request.user
         return context
 
-
 class VisitorGetUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView, CustomAuthenticationMixin):
     lookup_field = "id"
     queryset = Visitor.objects
@@ -45,11 +44,10 @@ class VisitorGetUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView, Cust
         context['updated_by'] = self.request.user
         return context
 
-
 class VisitorBlackListAPIView(views.APIView):
     def post(self, request, *args, **kwargs):
         if 'id' not in kwargs:
-            return response.Response({"message": "No id was provided"}, status=status.HTTP_400_BAD_REQUEST)
+            return response.Response({"detail": "No id was provided"}, status=status.HTTP_400_BAD_REQUEST)
         try:
             visitor = Visitor.objects.get(id=kwargs['id'])
             visitor.is_blacklisted = True
@@ -62,7 +60,7 @@ class VisitorBlackListAPIView(views.APIView):
             else: passes.update(is_cancelled=True)
             return response.Response(status=status.HTTP_200_OK)
         except Visitor.DoesNotExist:
-            return response.Response({'message': 'Visitor does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return response.Response({'detail': 'Visitor does not exist'}, status=status.HTTP_404_NOT_FOUND)
         
 class VisitorWhitelistAPIView(views.APIView):
     def post(self, request, *args, **kwargs):
@@ -78,4 +76,5 @@ class VisitorWhitelistAPIView(views.APIView):
             return response.Response(status=status.HTTP_200_OK)
         except Visitor.DoesNotExist:
             return response.Response({'message': 'Visitor does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
 
