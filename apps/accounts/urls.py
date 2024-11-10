@@ -12,4 +12,5 @@ urlpatterns = [
     path('update-user/<int:id>/', UpdateUserDetailsByAdmin.as_view()),
     path('reset-password-by-user/', ResetPasswordByUser.as_view()),
     path('reset-password-by-admin/<int:id>/', ResetPasswordByAdmin.as_view()),
+    path('validate-token/' , ValidateTokenAPIView.as_view()),
 ]

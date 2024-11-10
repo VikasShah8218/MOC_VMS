@@ -10,6 +10,9 @@ from rest_framework import generics, status
 from rest_framework import mixins, viewsets
 from rest_framework.views import APIView
 from apps.accounts.models import User
+from django.conf import settings
+import jwt
+
 
 
 class Test(APIView):
@@ -100,3 +103,20 @@ class ResetPasswordByAdmin(generics.UpdateAPIView, CustomAuthenticationMixin):
     def check_permissions(self, request):
         self.validate_user_type(request, allowed=['Admin'])
         return super().check_permissions(request)
+    
+
+class ValidateTokenAPIView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        try:
+            token = request.data.get('token')
+            if not token:
+                return Response({'error': 'Token is required'}, status=400)
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            return Response({'valid': True, 'payload': payload})
+        except jwt.ExpiredSignatureError:
+            return Response({'valid': False, 'message': 'Token has expired'})
+        except jwt.InvalidTokenError:
+            return Response({'valid': False, 'message': 'Invalid token'})
+        except Exception as e :
+            return Response({"detail":str(e)})

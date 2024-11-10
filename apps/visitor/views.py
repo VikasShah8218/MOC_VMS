@@ -12,6 +12,8 @@ from .models import Visitor
 from .serializers import VisitorSerializer, UpdateVisitorSerializer
 from apps.accounts.mixins import CustomAuthenticationMixin
 from apps.passes.models import VisitorPass
+from rest_framework.response import Response
+
 
 class VisitorListCreateAPIView(generics.ListCreateAPIView, CustomAuthenticationMixin):
     serializer_class = VisitorSerializer
@@ -77,4 +79,7 @@ class VisitorWhitelistAPIView(views.APIView):
         except Visitor.DoesNotExist:
             return response.Response({'message': 'Visitor does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
-
+class DeletedVisitors(views.APIView):
+    def get(self,request):
+        visitors = Visitor.objects.filter(is_deleted = True)
+        return Response(VisitorSerializer(visitors,many=True).data,status=200) if visitors else Response({"detail":"Visitors not Found"},status=404)

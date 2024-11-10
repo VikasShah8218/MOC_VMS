@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from apps.passes.models import VisitorPass
 from rest_framework.views import APIView
 from apps.gadgets.adam import activate
-
 from django.utils import timezone
 
 

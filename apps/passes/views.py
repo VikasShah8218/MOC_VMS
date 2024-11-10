@@ -142,7 +142,8 @@ class passDownload(APIView):
             }
         try:  
             response = HttpResponse(generate_pdf_from_html(perms,"pass"), content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="Visitor_Pass.pdf"'
+            # response['Content-Disposition'] = 'attachment; filename="Visitor_Pass.pdf"'
+            response['Content-Disposition'] = 'inline; filename="Visitor_Pass.pdf"'  # Set as inline
         except IOError:
             response = Response({"detail":"File not exist"})
         return response
