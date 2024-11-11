@@ -1,0 +1,13 @@
+# torch>=1.10.0o
+# torchvision>=0.11.0
+tensorflow>=2.6.0
+opencv-python>=4.5.3.56
+tqdm>=4.62.3
+progressbar>=2.5
+onnxruntime>=1.9.0
+pillow>=8.4.0
+pathlib
+numpy>=1.21.2
+heapq_max>=0.2
+mediapipe>=0.8.7
+ultralytics>=8.0.0

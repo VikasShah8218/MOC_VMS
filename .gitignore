@@ -8,6 +8,10 @@ db.sqlite3
 db.sqlite3-journal
 media
 
+apps.face_recognition.model/adaface_ir101_webface12m.ckpt
+apps.face_recognition.model/final_faceDet_model.pt
+apps.face_recognition.scripts/facetools/checkpoints/OULU_Protocol_2_model_0_0.onnx
+
 # Ignore staticfiles if collectstatic is used during build process
 # <django-project-name>/staticfiles/
 

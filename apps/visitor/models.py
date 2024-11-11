@@ -45,4 +45,11 @@ class VisitorLog(models.Model):
     visitor_pass = models.ForeignKey('passes.VisitorPass', on_delete=models.CASCADE,related_name="pass_track",null=True,blank=True)
     is_authorized = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class VisitorFaceFeatures(models.Model):
+    class Meta:
+        db_table = "tbl_visitor_face_features"
+    visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE,related_name="visitor_face_feature",null=True,blank=True)
+    feature = models.BinaryField(null=False)
     
