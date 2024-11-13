@@ -6,6 +6,8 @@ import numpy as np
 import heapq
 import random
 
+from apps.visitor.models import VisitorFaceFeatures
+
 ADA_MODEL_PATHS = {
     'ir_101': "D:/Drive-1/ESSI/MOC_VMS/apps/face_recognition/model/adaface_ir101_webface12m.ckpt",
 }
@@ -29,7 +31,6 @@ def to_input(pil_rgb_image, device='cpu'):
 
 # extract featutres
 def extract_feature(model, image=None, rgb_pil_image=None, device='cpu'):
-    print(image)
     aligned_rgb_img = align.get_aligned_face(img=image, rgb_pil_image=rgb_pil_image)
     bgr_tensor_input = to_input(aligned_rgb_img, device)
     with torch.no_grad():
@@ -92,7 +93,7 @@ def delete_from_db(db_path, person_id):
         conn.close()
 
 # Save features in database
-def store_feature_in_db(db_path, feature, image_path, person_name, similarity_threshold=0.43, top_k=1):
+def store_feature_in_db(feature,similarity_threshold,visitor=None):
     """
     Function to store facial features in a SQLite database with a unique ID.
 
@@ -107,36 +108,26 @@ def store_feature_in_db(db_path, feature, image_path, person_name, similarity_th
     tuple: (True, unique_id) if the feature was successfully stored, 
            (False, None) if a similar face already exists.
     """
-    conn = sqlite3.connect(db_path, timeout=3)
-    cursor = conn.cursor()
-
-    cursor.execute('''CREATE TABLE IF NOT EXISTS face_features
-                      (id INTEGER PRIMARY KEY AUTOINCREMENT, feature BLOB, name TEXT)''')
 
     try:
-        cursor.execute("SELECT id, feature, name FROM face_features")
-        stored_features = cursor.fetchall()
+        visitors_face_features = VisitorFaceFeatures.objects.all()
 
-        for stored_id, stored_feature_blob, stored_name in stored_features:
-            stored_feature = np.frombuffer(stored_feature_blob, dtype=np.float32)
-            similarity = np.dot(feature.flatten(), stored_feature) / (np.linalg.norm(feature) * np.linalg.norm(stored_feature))
-            
-            if similarity >= similarity_threshold:
-                print(f"Similar face already exists (similarity: {similarity:.2f}) with ID: {stored_id} Person Name: {stored_name}")
-                return False, stored_id
+        if visitors_face_features:
+            for visitor_face_feature in visitors_face_features:
+                stored_feature =  np.frombuffer(visitor_face_feature.feature, dtype=np.float32)
+                similarity = np.dot(feature.flatten(), stored_feature) / (np.linalg.norm(feature) * np.linalg.norm(stored_feature))
+
+                if similarity >= similarity_threshold:
+                    print(f"Similar face already exists (similarity: {similarity:.2f}) with Name: {visitor_face_feature.visitor.first_name} {visitor_face_feature.visitor.last_name}")
+                    return True, visitor_face_feature.visitor
 
         feature_blob = feature.tobytes()
-        cursor.execute('INSERT INTO face_features (feature, name) VALUES (?, ?)',
-                       (feature_blob, person_name))
-        conn.commit()
-
-        unique_id = cursor.lastrowid
-        print(f"Feature stored successfully for {person_name} with ID {unique_id}")
-        return True, unique_id
+        if visitor:
+            visitor_feature = VisitorFaceFeatures.objects.create(visitor=visitor,feature=feature_blob)
+            return True, visitor_feature.visitor
 
     except Exception as e:
         print(f"Error storing face: {e}")
         return False, None
 
-    finally:
-        conn.close()
+  

@@ -19,6 +19,7 @@ class Visitor(models.Model):
     is_blacklisted = models.BooleanField(default=False)
     is_pass_created = models.BooleanField(default=False)
     phone = models.CharField(max_length=20)
+    face_feature = models.BinaryField(null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_visitors",null=True,blank=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="updated_visitors",null=True,blank=True)
     created_on = models.DateTimeField(auto_now_add=True)

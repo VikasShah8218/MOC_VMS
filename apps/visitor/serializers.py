@@ -4,29 +4,32 @@ from rest_framework import serializers
 # Local Imports
 from .models import Visitor
 
-
 class VisitorBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Visitor
-        fields = ['id', 
-                  'first_name', 
-                  'last_name', 
-                  'visitor_type', 
-                  'address',
-                  'phone', 
-                  'image', 
-                  'gov_id_type', 
-                  'gov_id_no', 
-                  'is_blacklisted', 
-                  'is_pass_created',
-                  'created_on', 
-                  'created_by', 
-                  'updated_on', 
-                  'updated_by',
-                  'is_deleted',
-                  'other',
-                  ]
+        fields = [
+            'id', 
+            'first_name', 
+            'last_name', 
+            'visitor_type', 
+            'address',
+            'phone', 
+            'image', 
+            'gov_id_type', 
+            'gov_id_no', 
+            'is_blacklisted', 
+            'is_pass_created',
+            'created_on', 
+            'created_by', 
+            'updated_on', 
+            'updated_by',
+            'is_deleted',
+            'other',
+        ]
 
+    def create(self, validated_data):
+        validated_data.pop('face_feature', None) 
+        return super().create(validated_data)
 
 class VisitorSerializer(VisitorBaseSerializer):
     def create(self, validated_data):

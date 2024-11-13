@@ -10,4 +10,5 @@ urlpatterns = [
     path('whitelist/<int:id>', VisitorWhitelistAPIView.as_view()),
     path('access-gate', Access.as_view()),
     path('deleted-visitors', DeletedVisitors.as_view()),
+    path('find-similar-face', FindVisitorByFace.as_view()),
 ]

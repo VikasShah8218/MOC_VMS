@@ -1,6 +1,8 @@
 from apps.face_recognition.face_alignment import mtcnn
 from PIL import Image
-mtcnn_model = mtcnn.MTCNN(device='cpu', crop_size=(112, 112))
+import torch
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+mtcnn_model = mtcnn.MTCNN(device=device, crop_size=(112, 112))
 
 def add_padding(pil_img, top, right, bottom, left, color=(0,0,0)):
     width, height = pil_img.size
