@@ -59,7 +59,7 @@ class VisitorListCreateAPIView(generics.ListCreateAPIView, CustomAuthenticationM
             VisitorFaceFeatures.objects.create(visitor=visitor_instance, feature=feature)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        else: return Response({"detail":"image is required"})
+        else: return Response({"detail":"image is required"},status = 400) # field is required
 
 class VisitorGetUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView, CustomAuthenticationMixin):
     lookup_field = "id"
@@ -119,7 +119,7 @@ class FindVisitorByFace(APIView):
         if not visitor_image:
             return Response({"detail": "Image is required."}, status=status.HTTP_400_BAD_REQUEST)
         
-        matching_visitors = find_similar_face_in_db(visitor_image,similarity_threshold=0.73)
+        matching_visitors = find_similar_face_in_db(visitor_image,similarity_threshold=0.65)
         
         # Serialize the list of matching visitors
         serializer = VisitorSerializer(matching_visitors, many=True)
