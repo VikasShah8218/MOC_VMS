@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'apps.passes',
     'apps.gadgets',
     'apps.face_recognition',
+    'apps.reports',
     'utilities',
 
 ]

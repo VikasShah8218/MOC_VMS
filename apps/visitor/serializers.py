@@ -27,9 +27,7 @@ class VisitorBaseSerializer(serializers.ModelSerializer):
             'other',
         ]
 
-    def create(self, validated_data):
-        validated_data.pop('face_feature', None) 
-        return super().create(validated_data)
+
 
 class VisitorSerializer(VisitorBaseSerializer):
     def create(self, validated_data):

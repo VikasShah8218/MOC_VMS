@@ -12,8 +12,8 @@ class Adam(models.Model):
 
 
 class AdamLinkedwith(models.Model):
-    client_ip = models.CharField(max_length=50, null=True,blank=True)
-    adam = models.ForeignKey(Adam, related_name="adam", on_delete=models.CASCADE, null=True, blank=True)
+    client_ip = models.CharField(max_length=50,unique=True ,null=True,blank=True)
+    adam = models.OneToOneField(Adam, related_name="adam", on_delete=models.CASCADE, null=True,blank=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     other = models.CharField(max_length=255, null=True, blank=True)
 

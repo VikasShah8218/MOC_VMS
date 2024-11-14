@@ -19,6 +19,7 @@ urlpatterns = [
     path('gadgets/' , include(('apps.gadgets.urls'))),
     path('passes/' , include(('apps.passes.urls'))),
     path('face_recognition/' , include(('apps.face_recognition.urls'))),
+    path('reports/' , include(('apps.reports.urls'))),
     
 
 ]+jwt_token_url_patterns

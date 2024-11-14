@@ -119,7 +119,7 @@ class FindVisitorByFace(APIView):
         if not visitor_image:
             return Response({"detail": "Image is required."}, status=status.HTTP_400_BAD_REQUEST)
         
-        matching_visitors = find_similar_face_in_db(visitor_image,similarity_threshold=0.65)
+        matching_visitors = find_similar_face_in_db(visitor_image,similarity_threshold=0.47)
         
         # Serialize the list of matching visitors
         serializer = VisitorSerializer(matching_visitors, many=True)

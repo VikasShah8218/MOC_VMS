@@ -9,7 +9,18 @@ class AdamSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class AdamLinkedwithSerializer(serializers.ModelSerializer):
+class AdamLinkedwithCreateSerializer(serializers.ModelSerializer):
+    # adam = serializers.PrimaryKeyRelatedField(queryset=Adam.objects.all(), required=True)
+    class Meta:
+        model = AdamLinkedwith
+        fields = '__all__'
+
+
+
+
+class AdamLinkedwithReadSerializer(serializers.ModelSerializer):
+    adam = AdamSerializer(read_only=True)
     class Meta:
         model = AdamLinkedwith
         fields = '__all__'  
+
