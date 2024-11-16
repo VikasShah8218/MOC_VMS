@@ -11,6 +11,7 @@ class User(AbstractUser):
     USER_TYPES = {
         'Admin': 'Admin',
         'Employee': 'Employee',
+        'Guard': 'Guard',
     }
 
     user_type = models.CharField(max_length=255, choices=USER_TYPES, default=USER_TYPES['Employee'])

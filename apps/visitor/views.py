@@ -67,7 +67,7 @@ class VisitorGetUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView, Cust
     serializer_class = UpdateVisitorSerializer
 
     def check_permissions(self, request):
-        self.validate_user_type(request, allowed=['Admin', 'Receptionist'])
+        self.validate_user_type(request, allowed=['Admin', 'Receptionist','Guard'])
         return super().check_permissions(request)
     
     def get_serializer_context(self):
